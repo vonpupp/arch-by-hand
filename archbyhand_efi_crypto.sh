@@ -17,8 +17,8 @@ set -o nounset
 # this whole script needs to be customized, particularly disk partitions
 # and configuration, but this section contains global variables that
 # are used during the system configuration phase for convenience
-HOSTNAME=tau
-USERNAME=es
+HOSTNAME=vm
+USERNAME=afu
 
 # ------------------------------------------------------------------------
 # Globals
@@ -34,8 +34,8 @@ PACMAN="pacman --noconfirm --config /tmp/pacman.conf"
 TARGET_PACMAN="pacman --noconfirm --config /tmp/pacman.conf -r ${INSTALL_TARGET}"
 CHROOT_PACMAN="pacman --noconfirm --cachedir /var/cache/pacman/pkg --config /tmp/pacman.conf -r ${INSTALL_TARGET}"
 FILE_URL="file:///packages/core-$(uname -m)/pkg"
-FTP_URL='ftp://mirrors.kernel.org/archlinux/$repo/os/$arch'
-HTTP_URL='http://mirrors.kernel.org/archlinux/$repo/os/$arch'
+FTP_URL='ftp://archlinux.c3sl.ufpr.br/$repo/os/$arch'
+HTTP_URL='http://archlinux.c3sl.ufpr.br/$repo/os/$arch'
 
 # ------------------------------------------------------------------------
 # Functions

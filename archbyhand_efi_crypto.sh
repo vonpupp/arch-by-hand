@@ -102,18 +102,18 @@ echo -n "Network address acquired."
 
 # Mount packages squashfs images
 # ------------------------------------------------------------------------
-umount "/packages/core-$(uname -m)"
-umount "/packages/core-any"
-rm -rf "/packages/core-$(uname -m)"
-rm -rf "/packages/core-any"
-
-mkdir -p "/packages/core-$(uname -m)"
-mkdir -p "/packages/core-any"
-
-modprobe -q loop
-modprobe -q squashfs
-mount -o ro,loop -t squashfs "/src/packages/archboot_packages_$(uname -m).squashfs" "/packages/core-$(uname -m)"
-mount -o ro,loop -t squashfs "/src/packages/archboot_packages_any.squashfs" "/packages/core-any"
+#umount "/packages/core-$(uname -m)"
+#umount "/packages/core-any"
+#rm -rf "/packages/core-$(uname -m)"
+#rm -rf "/packages/core-any"
+#
+#mkdir -p "/packages/core-$(uname -m)"
+#mkdir -p "/packages/core-any"
+#
+#modprobe -q loop
+#modprobe -q squashfs
+#mount -o ro,loop -t squashfs "/src/packages/archboot_packages_$(uname -m).squashfs" "/packages/core-$(uname -m)"
+#mount -o ro,loop -t squashfs "/src/packages/archboot_packages_any.squashfs" "/packages/core-any"
 
 # Create temporary pacman.conf file
 # ------------------------------------------------------------------------
@@ -121,8 +121,8 @@ cat << PACMANEOF > /tmp/pacman.conf
 [options]
 Architecture = auto
 CacheDir = ${INSTALL_TARGET}/var/cache/pacman/pkg
-CacheDir = /packages/core-$(uname -m)/pkg
-CacheDir = /packages/core-any/pkg
+#CacheDir = /packages/core-$(uname -m)/pkg
+#CacheDir = /packages/core-any/pkg
 
 [core]
 Server = ${FILE_URL}

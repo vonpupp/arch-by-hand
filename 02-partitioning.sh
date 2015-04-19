@@ -26,8 +26,8 @@ sgdisk -c 2:"cryptlvm" /dev/sda
 # Create encrypted partitions
 # This creates one partions for root, modify if /home or other partitions should be on separate partitions
 echo -e "\nCreating encrypted partition...\n$HR"
-print -r $PASSWORD | cryptsetup luksFormat /dev/disk/by-partlabel/cryptlvm
-print -r $PASSWORD | cryptsetup open /dev/disk/by-partlabel/cryptlvm lvm
+echo -e $PASSWORD | cryptsetup luksFormat /dev/disk/by-partlabel/cryptlvm
+echo -e $PASSWORD | cryptsetup open /dev/disk/by-partlabel/cryptlvm lvm
 
 echo -e "\nCreating logical volumes...\n$HR"
 pvcreate $INSTALL_DEV

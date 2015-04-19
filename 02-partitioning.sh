@@ -3,6 +3,8 @@
 set -o nounset
 
 source vars.sh
+#umount -R /mnt
+#partprobe
 
 # ------------------------------------------------------------------------
 # Partitioning
@@ -25,12 +27,19 @@ sgdisk -t 2:8300 /dev/sda
 sgdisk -c 1:"UEFI Boot" /dev/sda
 sgdisk -c 2:"cryptlvm" /dev/sda
 
+# ------------------------------------------------------------------------
+# LUKS
+# ------------------------------------------------------------------------
 # Create encrypted partitions
 # This creates one partions for root, modify if /home or other partitions should be on separate partitions
 echo -e "\nCreating encrypted partition...\n$HR"
 echo -e $PASSWORD | cryptsetup luksFormat /dev/disk/by-partlabel/cryptlvm
+sleep 2
 echo -e $PASSWORD | cryptsetup open /dev/disk/by-partlabel/cryptlvm lvm
 
+# ------------------------------------------------------------------------
+# LVM
+# ------------------------------------------------------------------------
 echo -e "\nCreating logical volumes...\n$HR"
 pvcreate $INSTALL_DEV
 vgcreate storage $INSTALL_DEV
@@ -38,26 +47,20 @@ lvcreate --size 15G storage --name root
 lvcreate --size  4G storage --name swap
 lvcreate -l +100%FREE storage --name home
 
-INSTALL_DEV="/dev/mapper/storage-system"
-
-# mkfs filesystems
+# ------------------------------------------------------------------------
+# FORMAT
+# ------------------------------------------------------------------------
 echo -e "\nFormating partitions...\n$HR"
 mkfs.vfat -F32 /dev/sda1
-#mkfs.ext2 /dev/sda2                             # REMOVE THIS
-#mkswap /dev/sda2                                # REMOVE THIS
-#mkfs.ext4 /dev/sda3
-#mkfs.ntfs /dev/sda3
-
-# mkfs lvm
 mkfs.ext4 /dev/mapper/storage-root
-#mkfs.ext4 /dev/mapper/vg0-swap                 # NOT NEEDED
 mkfs.ext4 /dev/mapper/storage-home
 mkswap -L swap /dev/mapper/storage-swap
 swapon -d -L swap
 
+# ------------------------------------------------------------------------
+# MOUNT
+# ------------------------------------------------------------------------
 echo -e "\nMounting partitions...\n$HR"
-# mount target
-umount -R /mnt
 mount /dev/storage/root /mnt
 mkdir -p /mnt/boot
 mount /dev/sda1 /mnt/boot

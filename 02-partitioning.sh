@@ -1,7 +1,9 @@
 #!/bin/bash
 
+source vars.sh
+
 # ------------------------------------------------------------------------
-# Configure Host
+# Partitioning
 # ------------------------------------------------------------------------
 
 echo -e "\nFormatting disk...\n$HR"
@@ -23,8 +25,11 @@ sgdisk -c 2:"cryptlvm" /dev/sda
 
 # Create encrypted partitions
 # This creates one partions for root, modify if /home or other partitions should be on separate partitions
+echo -e "\nCreating encrypted partition...\n$HR"
 print -r $PASSWORD | cryptsetup luksFormat /dev/disk/by-partlabel/cryptlvm
 print -r $PASSWORD | cryptsetup open /dev/disk/by-partlabel/cryptlvm lvm
+
+echo -e "\nCreating logical volumes...\n$HR"
 pvcreate $INSTALL_DEV
 vgcreate storage $INSTALL_DEV
 lvcreate --size 15G storage --name root
@@ -34,7 +39,7 @@ lvcreate -l +100%FREE storage --name home
 INSTALL_DEV="/dev/mapper/storage-system"
 
 # mkfs filesystems
-echo -e "\nCreating Filesystems...\n$HR"
+echo -e "\nFormating partitions...\n$HR"
 mkfs.vfat -F32 /dev/sda1
 #mkfs.ext2 /dev/sda2                             # REMOVE THIS
 #mkswap /dev/sda2                                # REMOVE THIS
@@ -48,8 +53,7 @@ mkfs.ext4 /dev/mapper/storage-home
 mkswap -L swap /dev/mapper/storage-swap
 swapon -d -L swap
 
-### MOUNT
-
+echo -e "\nMounting partitions...\n$HR"
 # mount target
 umount -R /mnt
 mount /dev/storage/root /mnt

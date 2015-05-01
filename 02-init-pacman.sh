@@ -4,7 +4,7 @@
 # Mount NFS Cache
 # ------------------------------------------------------------------------
 mkdir -p /packages/core-$(uname -m)/pkg
-mount -t nfs nas:/share/cache/arch/core-$(uname -m)/pkg /packages/core-$(uname -m)/pkg
+mount -t -o nolock nfs $NFS_SERVER:/share/cache/arch/core-$(uname -m)/pkg /packages/core-$(uname -m)/pkg
 
 # Mount packages squashfs images
 # ------------------------------------------------------------------------

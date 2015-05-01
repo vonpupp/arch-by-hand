@@ -15,6 +15,7 @@ CHROOT_PACMAN="pacman --cachedir /var/cache/pacman/pkg --config /tmp/pacman.conf
 FILE_URL="file:///packages/core-$(uname -m)/pkg"
 FTP_URL='ftp://archlinux.c3sl.ufpr.br/archlinux/$repo/os/$arch'
 HTTP_URL='http://archlinux.c3sl.ufpr.br/$repo/os/$arch'
+DISK_DEV="/dev/sda"
 INSTALL_DEV="/dev/mapper/lvm"
 
 # ------------------------------------------------------------------------
